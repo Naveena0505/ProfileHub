@@ -1,5 +1,8 @@
-Personal Information System
+# Personal Information System
+
 ![image alt](https://github.com/Naveena0505/ProfileHub/blob/0f67c071a0bae1af678c95754d6bf86054829262/ss2.jpeg)
+
+![image alt](https://github.com/Naveena0505/ProfileHub/blob/2082b2b2545c4cacbde974b1a715438eea53eda8/ss1.jpeg)
 A simple, web-based application for managing personal records. This system allows users to create, view, update, and delete profiles. It also includes features for photo uploads and exporting data to CSV and PDF formats.
 
 Features
