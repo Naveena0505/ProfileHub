@@ -1,0 +1,8 @@
+You can install them all at once by running: pip install -r requirements.txt
+Flask==3.0.0
+Pillow==10.1.0
+fpdf==1.7.2
+Werkzeug==3.0.1
+
+Note: Other packages like Jinja2, click, etc., are automatically
+installed as dependencies of Flask. 
