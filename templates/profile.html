@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+
+    {# PART 1: The Edit Details Form #}
+    <h2 class="mb-4 text-white text-center">Personal Information System</h2>
+    <form method="POST" action="{{ url_for('update_profile', person_id=person['id']) }}" enctype="multipart/form-data">
+        <div class="card p-4 shadow-lg border-0">
+            <div class="row g-0">
+                <div class="col-md-4 d-flex flex-column align-items-center border-end border-light-subtle pe-4">
+                    <div class="text-center mb-3">
+                        <img src="{{ url_for('static', filename='uploads/' + (person['photo_filename'] or 'default.png')) }}" 
+                             class="profile-photo img-thumbnail" alt="{{ person['full_name'] }} Photo"
+                             style="width: 180px; height: 180px; border-radius: 50%;">
+                        <p class="text-muted mt-2 mb-0">ID: {{ person['id'] }}</p>
+                    </div>
+                    <div class="w-100 mb-3">
+                        <label for="photo" class="form-label text-muted small mb-1">Choose a new photo to update</label>
+                        <input type="file" id="photo" name="photo" class="form-control form-control-sm" accept=".jpg,.jpeg,.png">
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 mb-2">Save All Changes</button>
+                    <button type="reset" class="btn btn-outline-secondary w-100">Clear Edits</button>
+                </div>
+                <div class="col-md-8 ps-4">
+                    <h4 class="mb-4 fw-bold" style="color:#3a207b;">Edit Details: {{ person['full_name'] }}</h4>
+                    <div class="row g-3">
+                        {% macro edit_group(label, name, type='text', value='', options=None, required=True) %}
+                        <div class="col-md-6">
+                            <label for="{{ name }}" class="form-label text-muted small mb-0">{{ label }}</label>
+                            {% if type == 'select' %}
+                                <select class="form-select" id="{{ name }}" name="{{ name }}" {% if required %}required{% endif %}>
+                                    {% for opt in options %}
+                                        <option value="{{ opt }}" {% if opt == value %}selected{% endif %}>{{ opt }}</option>
+                                    {% endfor %}
+                                </select>
+                            {% else %}
+                                <input type="{{ type }}" class="form-control" id="{{ name }}" name="{{ name }}" value="{{ value }}" {% if required %}required{% endif %}>
+                            {% endif %}
+                        </div>
+                        {% endmacro %}
+                        {{ edit_group('Full Name', 'full_name', 'text', person['full_name']) }}
+                        {{ edit_group('Date of Birth', 'dob', 'date', person['dob']) }}
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small mb-0">Age</label>
+                            <input type="number" class="form-control" value="{{ person['age'] }}" readonly disabled>
+                        </div>
+                        {{ edit_group('Gender', 'gender', 'select', person['gender'], ['Male', 'Female', 'Other']) }}
+                        {{ edit_group('Phone', 'phone', 'tel', person['phone']) }}
+                        {{ edit_group('Email', 'email', 'email', person['email']) }}
+                        {{ edit_group('Religion', 'religion', 'select', person['religion'], ['Hindu', 'Christian', 'Muslim', 'Other']) }}
+                        {{ edit_group('Occupation', 'occupation', 'text', person['occupation']) }}
+                        <div class="col-12">
+                            <label for="address" class="form-label text-muted small mb-0">Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="2" required>{{ person['address'] }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {# PART 2: The Data Table #}
+    <div class="card p-4 shadow-lg border-0 mt-4">
+        <h5 class="mb-3" style="color:#3a207b;">Search Records</h5>
+        <form method="GET" action="{{ url_for('profile', person_id=person.id) }}" class="mb-3">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-6">
+                    <input type="text" name="search" class="form-control" placeholder="Search by Name, Phone, or Email..." value="{{ search_query }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="table-responsive mb-3">
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th><th>DOB</th><th>Gender</th><th>Phone</th><th>Email</th><th>Address</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in all_people %}
+                    <tr>
+                        <td><a href="{{ url_for('profile', person_id=p['id']) }}">{{ p['full_name'] }}</a></td>
+                        <td>{{ p['dob'] | display_dob }}</td>
+                        <td>{{ p['gender'] }}</td>
+                        <td>{{ p['phone'] }}</td>
+                        <td>{{ p['email'] }}</td>
+                        <td>{{ p['address'] }}</td>
+                        <td>
+                            <a href="{{ url_for('profile', person_id=p['id']) }}" class="btn btn-sm btn-info" title="View/Edit">✏️</a>
+                            <a href="{{ url_for('delete_profile', person_id=p['id']) }}" class="btn btn-sm btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this record?')">🗑️</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row g-2 mt-3">
+            <div class="col-md-3">
+                <!-- FIXED: Added 'text-white' class to this button -->
+                <a href="{{ url_for('export_csv', search=search_query) }}" class="btn btn-primary w-100 text-white">Export CSV</a>
+            </div>
+            <div class="col-md-3">
+                <a href="{{ url_for('export_pdf', search=search_query) }}" class="btn btn-warning w-100">Export PDF</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

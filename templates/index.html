@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex flex-column justify-content-center align-items-center min-vh-100"> 
+    <h1 class="text-white mb-4">Personal Information System</h1>
+    <form class="w-75 d-flex justify-content-center" method="get" action="{{ url_for('index') }}">
+        <div class="input-group" style="max-width:600px; width:100%;">
+          <input type="text" name="q" class="form-control rounded-pill px-4 py-3 shadow-lg"
+                 placeholder="Search by ID, Name, or Phone..." value="{{ q }}">
+        </div>
+    </form>
+    <div class="mt-4 text-center">
+        <a href="{{ url_for('create_profile') }}" class="btn btn-lg btn-success rounded-pill shadow-lg">
+            + Create New Profile
+        </a>
+    </div>
+</div>
+{% if results %}
+  <div class="container py-4" style="margin-top: -25vh;">
+    <h5 class="mb-3 text-white">Search Results ({{ results|length }})</h5>
+    <div class="list-group">
+      {% for r in results %}
+        <a href="{{ url_for('profile', person_id=r['id']) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="mb-1">{{ r['full_name'] }}</h6>
+            <small class="text-muted">ID: {{ r['id'] }} | Phone: {{ r['phone'] }}</small>
+          </div>
+          <img src="{{ url_for('static', filename='uploads/' + (r['photo_filename'] or 'default.png')) }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

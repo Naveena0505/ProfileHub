@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    {# Page Header #}
+    <h2 class="mb-4 text-white text-center">New Profile Entry</h2>
+
+    {# MAIN INPUT FORM CARD #}
+    <div class="card p-4 shadow-lg border-0">
+        
+        {# Form action must be POST and include enctype="multipart/form-data" to handle the file #}
+        <form method="POST" action="{{ url_for('create_profile') }}" enctype="multipart/form-data">
+
+            <div class="row g-0">
+
+                {# LEFT COLUMN: Photo Input and Save/Clear Buttons #}
+                <div class="col-md-4 d-flex flex-column align-items-center border-end border-light-subtle pe-4">
+                    
+                    {# Placeholder Image #}
+                    <div class="text-center mb-3">
+                        <img src="{{ url_for('static', filename='default.png') }}" 
+                             class="profile-photo img-thumbnail" 
+                             alt="Placeholder Photo"
+                             style="width: 180px; height: 180px; border-radius: 50%;">
+                        <p class="text-muted mt-2 mb-0">New ID: {{ next_id }}</p>
+                    </div>
+
+                    {# *** NEW PHOTO SELECTION INPUT *** #}
+                    <div class="w-100 mb-3 text-center">
+                        <label for="photo" class="form-label text-muted small mb-1">Select Passport Photo (Optional)</label>
+                        <input type="file" class="form-control form-control-sm" id="photo" name="photo" accept=".jpg,.jpeg,.png">
+                        <div class="form-text small">Accepted: png/jpg/jpeg. Max 2MB.</div>
+                    </div>
+
+
+                    {# Action Buttons #}
+                    <button type="submit" class="btn btn-success w-100 mb-2 mt-3">
+                        <i class="fas fa-save"></i> Save Profile
+                    </button>
+                    <button type="reset" class="btn btn-outline-secondary w-100">
+                        Clear Form
+                    </button>
+                </div>
+
+                {# RIGHT COLUMN: Input Fields #}
+                <div class="col-md-8 ps-4">
+                    
+                    <h4 class="mb-4" style="color:#3a207b;">Enter Personal Details</h4>
+
+                    <div class="row g-3">
+                        
+                        {# Row 1: Full Name #}
+                        <div class="col-12">
+                            <label for="full_name" class="form-label text-muted small mb-0">Full Name</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" placeholder="E.g., Lekha Nair" required>
+                        </div>
+
+                        {# Row 2: Date of Birth and Phone #}
+                        <div class="col-md-6">
+                            <label for="dob" class="form-label text-muted small mb-0">Date of Birth (DOB)</label>
+                            <input type="date" class="form-control" id="dob" name="dob" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label text-muted small mb-0">Phone (Unique)</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="E.g., 9876543210" pattern="[0-9]{10}" title="Ten digits phone number" required>
+                        </div>
+
+                        {# Row 3: Gender and Religion #}
+                        <div class="col-md-6">
+                            <label for="gender" class="form-label text-muted small mb-0">Gender</label>
+                            <select class="form-select" id="gender" name="gender" required>
+                                <option value="" disabled selected>Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="religion" class="form-label text-muted small mb-0">Religion</label>
+                            <select class="form-select" id="religion" name="religion" required>
+                                <option value="" disabled selected>Select Religion</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Christian">Christian</option>
+                                <option value="Muslim">Muslim</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        {# Row 4: Email and Occupation #}
+                        <div class="col-md-6">
+                            <label for="email" class="form-label text-muted small mb-0">Email (Unique)</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="E.g., name.surname@example.com" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="occupation" class="form-label text-muted small mb-0">Occupation</label>
+                            <input type="text" class="form-control" id="occupation" name="occupation" placeholder="E.g., Doctor, Teacher" required>
+                        </div>
+
+                        {# Row 5: Address (Full Width) #}
+                        <div class="col-12">
+                            <label for="address" class="form-label text-muted small mb-0">Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="2" placeholder="House No: 101, Main Road, Kollam, Kerala - 691001" required></textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+    
+</div>
+
+{% endblock %}
